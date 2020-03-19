@@ -214,6 +214,7 @@ class Tablero:
                     mousex, mousey = event.pos
                     mouseclick = True
                     print('presionaddooo0 en {}'.format(event.pos))
+                    print ("brid pastel")
 
                 #pygame.draw.rect(self.screen, (0,0,255), (self.Pieza.seleccionar()), (216, 191, 216))
                 self.actualizartab()
