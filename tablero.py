@@ -6,8 +6,7 @@ Created on Tue Feb 25 04:57:08 2020
 @author: bridget
 """
 
-import sys 
-sys.path.append('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/')
+import sys
 from pieza import *
 
 from jugador import Jugador
@@ -20,31 +19,31 @@ from pygame.locals import *
 
 import random
 from random import randrange, choice
- #importa todas las clases 
+ #importa todas las clases
 
-class InvalidColor(Exception): 
+class InvalidColor(Exception):
     pass
-class InvalidOption(Exception): 
+class InvalidOption(Exception):
     pass
 
 class Tablero:
     def __init__(self):
         """Aquí se inicializan los atributos del tablero y de la pantalla de pygame que lo contiene"""
-        self.jugador  = Jugador() 
+        self.jugador  = Jugador()
         self.SCREEN_WIDTH= 640
         self.widthtab = 640
         self.SCREEN_HEIGHT= 640
         self.heighttab = 640
         self.xposition = 0
         self.yposition = 0
-        self.tableros = ['/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-azul-notacion.png'   ,
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-gris-notacion.png'   ,
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-marron-notacion.png' ,
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-naranja-notacion.png',
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-negro-notacion.png'  ,
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-rojo-notacion.png'   ,
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-verde-notacion.png'  ,
-                         '/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/tableros/tablero-violeta-notacion.png']
+        self.tableros = ['tableros/tablero-azul-notacion.png'   ,
+                         'tableros/tablero-gris-notacion.png'   ,
+                         'tableros/tablero-marron-notacion.png' ,
+                         'tableros/tablero-naranja-notacion.png',
+                         'tableros/tablero-negro-notacion.png'  ,
+                         'tableros/tablero-rojo-notacion.png'   ,
+                         'tableros/tablero-verde-notacion.png'  ,
+                         'tableros/tablero-violeta-notacion.png']
         #pygame.init()
         self.opciones = {
             "1" : 0,#self.tableros[0],
@@ -82,11 +81,11 @@ class Tablero:
                 except InvalidColor:
                     print("Opcion Inválida")#print("{} no es una opcion valida".format(opcion))#
                     y = False
-      
+
     def generartab(self, fondo = random.randint(0,7)):
-        
-        
-        
+
+
+
         pygame.init()
         self.fondo = pygame.image.load((self.tableros[fondo]))######
         #print(self.fondo)
@@ -97,17 +96,17 @@ class Tablero:
         #print("hola")
         self.actualizartab()
         #self.quitar()
-        
-        
+
+
     def aprobartab(self):
-        
+
         y = True
         while y:
             aprob = input("\n ¿Te gustó el color? [y/n]")
             if aprob == "y":
                 self.inicializartab()
                 #self.iniciar()
-                
+
             elif aprob == "n":
                 self.elegirtab()
             else:
@@ -116,10 +115,10 @@ class Tablero:
                 except InvalidOption:
                     print("Opcion Inválida")
                     break
-                
+
     def inicializartab(self):
         """ Crea las fichas del tablero de juego """
-        
+
          #col fila
         #self.generartab(self.fondo)
         self.screen.blit (Rook((0,0), "w").dibujar()[0],
@@ -138,7 +137,7 @@ class Tablero:
                     Knight((6,0), "w").dibujar()[1])
         self.screen.blit (Rook((7,0), "w").dibujar()[0],
                     Rook((7,0), "w").dibujar()[1])
-        
+
         self.screen.blit (Pawn((0,1), "w").dibujar()[0],
                     Pawn((0,1), "w").dibujar()[1])
         self.screen.blit (Pawn((1,1), "w").dibujar()[0],
@@ -155,7 +154,7 @@ class Tablero:
                     Pawn((6,1), "w").dibujar()[1])
         self.screen.blit (Pawn((7,1), "w").dibujar()[0],
                     Pawn((7,1), "w").dibujar()[1])
-        
+
         self.screen.blit (Pawn((0,6), "b").dibujar()[0],
                     Pawn((0,6), "b").dibujar()[1])
         self.screen.blit (Pawn((1,6), "b").dibujar()[0],
@@ -172,8 +171,8 @@ class Tablero:
                     Pawn((6,6), "b").dibujar()[1])
         self.screen.blit (Pawn((7,6), "b").dibujar()[0],
                     Pawn((7,6), "b").dibujar()[1])
-        
-        
+
+
         self.screen.blit (Rook((0,7), "b").dibujar()[0],
                     Rook((0,7), "b").dibujar()[1])
         self.screen.blit (Knight((1,7), "b").dibujar()[0],
@@ -190,31 +189,39 @@ class Tablero:
                     Knight((6,7), "b").dibujar()[1])
         self.screen.blit (Rook((7,7), "b").dibujar()[0],
                     Rook((7,7), "b").dibujar()[1])
-        
+
         self.actualizartab()
         self.seleccionar()
-        
-    
+
+
         #self.quitar()
         #funciona raro, si viene de el menu normal se sale al menú del ajedrez on el x o con n en la pregunta si quiere jugar, si viene de elegir tablero con n marca error, exit regresa a preguntar error: display Surface quit si quiere iniciar un nuevo juego
-        
+
     def seleccionar(self):
-        self.jugador.nombrar_jugadores()
-        print("pop")
+        self.jugador.nombrar()
         run = True
+        seleccion = False       #indica si han seleccionado una ficha
+        mousex,mousey = 0, 0        #coordenadas rectangulares del mouse
         while run:
+            mouseclick = False   #indica si se ha hecho click
             pygame.time.delay(100)#?? things is just dont happen super quick, this is kind of like the clock in the game ??
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:## hasta que check mate sea verdadero
+                if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):## hasta que check mate sea verdadero
                     run = False #sys.exit()
-                print("hola")
+                elif not mouseclick and event.type == MOUSEMOTION:
+                    mousex, mousey = event.pos
+                elif not mouseclick and event.type == MOUSEBUTTONUP:
+                    mousex, mousey = event.pos
+                    mouseclick = True
+                    print('presionaddooo0 en {}'.format(event.pos))
+
                 #pygame.draw.rect(self.screen, (0,0,255), (self.Pieza.seleccionar()), (216, 191, 216))
                 self.actualizartab()
         self.quitar()
-    
+
     def actualizartab(self):
         pygame.display.update()
-        
+
     def quitar(self):
         pygame.quit()
         sys.exit()

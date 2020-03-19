@@ -21,36 +21,36 @@ class Imagen():
         self.height= 65
         self.B = []
         self.W = []
-        
+
     def importar(self):
         """Aquí se cargan las imágenes que representarán las piezas utilizando pygame"""
-        b_alfil   = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/blackb.png'))
-        b_rey     = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/blackk.png'))
-        b_caballo = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/blackn.png'))
-        b_peon    = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/blackp.png'))
-        b_reina   = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/blackq.png'))
-        b_torre   = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/blackr.png'))
-        
-        w_alfil   = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/whiteb.png'))
-        w_rey     = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/whitek.png'))
-        w_caballo = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/whiten.png'))
-        w_peon    = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/whitep.png'))
-        w_reina   = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/whiteq.png'))
-        w_torre   = pygame.image.load(os.path.join('/home/bridget/Downloads/Trimestre19O/POO/Ajedrez/img1/whiter.png'))
-                
+        b_alfil   = pygame.image.load(os.path.join('img1/blackb.png'))
+        b_rey     = pygame.image.load(os.path.join('img1/blackk.png'))
+        b_caballo = pygame.image.load(os.path.join('img1/blackn.png'))
+        b_peon    = pygame.image.load(os.path.join('img1/blackp.png'))
+        b_reina   = pygame.image.load(os.path.join('img1/blackq.png'))
+        b_torre   = pygame.image.load(os.path.join('img1/blackr.png'))
+
+        w_alfil   = pygame.image.load(os.path.join('img1/whiteb.png'))
+        w_rey     = pygame.image.load(os.path.join('img1/whitek.png'))
+        w_caballo = pygame.image.load(os.path.join('img1/whiten.png'))
+        w_peon    = pygame.image.load(os.path.join('img1/whitep.png'))
+        w_reina   = pygame.image.load(os.path.join('img1/whiteq.png'))
+        w_torre   = pygame.image.load(os.path.join('img1/whiter.png'))
+
         """Se obtiene una lista de las imágenes"""
         #Surface objects
         b = [b_alfil, b_rey, b_caballo, b_peon, b_reina, b_torre]
         w = [w_alfil, w_rey, w_caballo, w_peon, w_reina, w_torre]
-        
+
         """Se hace una comprehensionlist de las imágenes escaladas"""
         self.B = [pygame.transform.scale(img, (self.width, self.height)) for img in b]
         self.W = [pygame.transform.scale(img, (self.width, self.height)) for img in w]
 
-        
+
         """Se hacen transparentes los bordes de las imágenes
         en una lista"""
-        
+
         #self.B = [img.convert_alpha() for img in self.B]
         #self.W = [img.convert_alpha() for img in self.W]
         return self.B, self.W
@@ -58,11 +58,11 @@ class Imagen():
 
 """Definición de las excepciones que se van a usar"""
 
-class InvalidPiece(Exception): 
+class InvalidPiece(Exception):
     pass
-class InvalidColor(Exception): 
+class InvalidColor(Exception):
     pass
-class InvalidMovement(Exception): 
+class InvalidMovement(Exception):
     pass
 
 class Pieza:
@@ -74,15 +74,15 @@ class Pieza:
         #self.img = self.img
         self.selected = False
         self.B, self.W = Imagen().importar() #lista de imagenes
-        
+
         self.movelist = []
 
         self.x = (640-60) / 16
         self.y = (640-60) / 16
         self.width =65
         self.height=65
-        self.increment = (640-60) / 8 
-    
+        self.increment = (640-60) / 8
+
     def dibujar(self,img): #color w y
         self.img = img
         if self.color == "w":
@@ -92,11 +92,11 @@ class Pieza:
         self.row= self.row*self.increment + self.x
         self.col = self.col*self.increment + self.y
         return self.forma, (self.col,self.row)
-    
-    
+
+
     def seleccionar1(self):
         return self.selected
-    
+
     def seleccionar(self):
         #Atributos del recuadro
         self.xpositioni = 33
@@ -109,9 +109,9 @@ class Pieza:
             self.xpositioni+=self.increment
         if keys[pygame.K_UP] and self.ypositioni > self.increment:
             self.ypositioni-=self.increment
-        if keys[pygame.K_DOWN] and self.ypositioni < 640 - self.height - self.increment: 
+        if keys[pygame.K_DOWN] and self.ypositioni < 640 - self.height - self.increment:
             self.ypositioni+=self.increment
-        
+
         # Dibuja la superficie con la posicion de las "Surface" sobre la ventana
         #return (self.xpositioni, self.ypositioni, self.increment, self.increment) #screen.fill((0,0,0))
         #screen.blit(fondo, (0, 0)) #col fila
@@ -133,7 +133,7 @@ class Pieza:
                 x+=increment
             if keys[pygame.K_UP] and y > increment:
                 y-=increment
-                if keys[pygame.K_DOWN] and y < 640 - height - increment: 
+                if keys[pygame.K_DOWN] and y < 640 - height - increment:
                     y+=increment
                 if keys[pygame.K_SPACE]:
                     try:
@@ -144,16 +144,16 @@ class Pieza:
                 # Dibuja la superficie con la posicion de las "Surface" sobre la ventana
                 #screen.fill((0,0,0))
                 screen.blit(fondo, (0, 0)) #col fila
-                
+
                 screen.blit(tB, (x, y)) ## debe llamar a todas las piezas con su posición actual tablero?
-                
+
                 pygame.display.update() # allows to update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
                 #pygame.display.flip() # will update the contents of the entire display
- 
+
     def validarmovimientos(self, tablero):#lista de movimientos
         self.movelist = self.valid_moves(tablero)
 
-    
+
     def cambiarpos (self): #actualiza la posición
         self.row = posición[0]
         self.col = posición[1]
