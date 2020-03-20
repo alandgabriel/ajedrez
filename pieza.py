@@ -84,6 +84,7 @@ class Pieza:
         self.increment = (640-60) / 8
 
     def dibujar(self,img): #color w y
+        """Con este método se dibujan las piezas en el tablero"""
         self.img = img
         if self.color == "w":
             self.forma = self.W[self.img] #self.img atributo por sobreescribir
@@ -92,6 +93,12 @@ class Pieza:
         self.row= self.row*self.increment + self.x
         self.col = self.col*self.increment + self.y
         return self.forma, (self.col,self.row)
+
+
+
+
+
+
 
 
     def seleccionar1(self):
@@ -157,6 +164,14 @@ class Pieza:
     def cambiarpos (self): #actualiza la posición
         self.row = posición[0]
         self.col = posición[1]
+
+
+
+
+
+
+
+
 
 # Polimorfismo en cada pieza
 

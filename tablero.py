@@ -20,6 +20,8 @@ from pygame.locals import *
 import random
 from random import randrange, choice
  #importa todas las clases
+import math
+
 
 class InvalidColor(Exception):
     pass
@@ -199,6 +201,8 @@ class Tablero:
 
     def seleccionar(self):
         self.jugador.nombrar()
+        self.orig= 34#580/16
+        self.inc = 580/8
         run = True
         seleccion = False       #indica si han seleccionado una ficha
         mousex,mousey = 0, 0        #coordenadas rectangulares del mouse
@@ -214,7 +218,8 @@ class Tablero:
                     mousex, mousey = event.pos
                     mouseclick = True
                     print('presionaddooo0 en {}'.format(event.pos))
-                    print ("brid pastel")
+                    print('presionaddooo0 en {},{}'.format((mousex-self.orig)/self.inc, (mousey-self.orig)/self.inc))
+                    print('presionaddooo0 en {},{}'.format(math.floor((mousex-self.orig)/self.inc), math.floor((mousey-self.orig)/self.inc)))
 
                 #pygame.draw.rect(self.screen, (0,0,255), (self.Pieza.seleccionar()), (216, 191, 216))
                 self.actualizartab()
