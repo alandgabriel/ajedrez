@@ -32,6 +32,8 @@ class Tablero:
     def __init__(self):
         """Aquí se inicializan los atributos del tablero y de la pantalla de pygame que lo contiene"""
         self.jugador  = Jugador()
+        self.pieza = Pieza()
+        self.clock = pygame.time.Clock()
         self.SCREEN_WIDTH= 640
         self.widthtab = 640
         self.SCREEN_HEIGHT= 640
@@ -57,6 +59,13 @@ class Tablero:
             "7" : 6,#self.tableros[6],
             "8" : 7#self.tableros[7]
         }
+        self.mascara_piezas = ['torre', 'caballo', 'alfil', 'rey', 'reina', 'alfil', 'caballo', 'torre']+8*['peon']
+        self.pos_blancas = list(zip(list(range(8))+list(range(8)),[0]*8+[1]*8))
+        self.pos_negras = list(zip(list(range(8))+list(range(8)),[6]*8+[7]*8))
+        self.pixel_blancas = self.pieza.cuadro_pixel(self.pos_blancas)
+        self.pixel_negras = self.pieza.cuadro_pixel (self.pos_negras)
+        self.seq_surfaces = list (zip (self.pieza.W + self.pieza.B, self.pixel_blancas + self.pixel_negras))
+
     def desplegar(self):
         """Despliega el menú de opciones para los colores del tablero"""
         print(self.opciones)
@@ -106,7 +115,7 @@ class Tablero:
         while y:
             aprob = input("\n ¿Te gustó el color? [y/n]")
             if aprob == "y":
-                self.inicializartab()
+                self.dibujarpiezas()
                 #self.iniciar()
 
             elif aprob == "n":
@@ -118,97 +127,40 @@ class Tablero:
                     print("Opcion Inválida")
                     break
 
-    def inicializartab(self):
+    def dibujarpiezas(self):
         """ Crea las fichas del tablero de juego """
-
-         #col fila
-        #self.generartab(self.fondo)
-        self.screen.blit (Rook((0,0), "w").dibujar()[0],
-                    Rook((0,0), "w").dibujar()[1])
-        self.screen.blit (Knight((1,0), "w").dibujar()[0],
-                    Knight((1,0), "w").dibujar()[1])
-        self.screen.blit (Bishop((2,0), "w").dibujar()[0],
-                    Bishop((2,0), "w").dibujar()[1])
-        self.screen.blit (King((3,0), "w").dibujar()[0],
-                    King((3,0), "w").dibujar()[1])
-        self.screen.blit (Queen((4,0), "w").dibujar()[0],
-                    Queen((4,0), "w").dibujar()[1])
-        self.screen.blit (Bishop((5,0), "w").dibujar()[0],
-                    Bishop((5,0), "w").dibujar()[1])
-        self.screen.blit (Knight((6,0), "w").dibujar()[0],
-                    Knight((6,0), "w").dibujar()[1])
-        self.screen.blit (Rook((7,0), "w").dibujar()[0],
-                    Rook((7,0), "w").dibujar()[1])
-
-        self.screen.blit (Pawn((0,1), "w").dibujar()[0],
-                    Pawn((0,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((1,1), "w").dibujar()[0],
-                    Pawn((1,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((2,1), "w").dibujar()[0],
-                    Pawn((2,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((3,1), "w").dibujar()[0],
-                    Pawn((3,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((4,1), "w").dibujar()[0],
-                    Pawn((4,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((5,1), "w").dibujar()[0],
-                    Pawn((5,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((6,1), "w").dibujar()[0],
-                    Pawn((6,1), "w").dibujar()[1])
-        self.screen.blit (Pawn((7,1), "w").dibujar()[0],
-                    Pawn((7,1), "w").dibujar()[1])
-
-        self.screen.blit (Pawn((0,6), "b").dibujar()[0],
-                    Pawn((0,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((1,6), "b").dibujar()[0],
-                    Pawn((1,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((2,6), "b").dibujar()[0],
-                    Pawn((2,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((3,6), "b").dibujar()[0],
-                    Pawn((3,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((4,6), "b").dibujar()[0],
-                    Pawn((4,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((5,6), "b").dibujar()[0],
-                    Pawn((5,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((6,6), "b").dibujar()[0],
-                    Pawn((6,6), "b").dibujar()[1])
-        self.screen.blit (Pawn((7,6), "b").dibujar()[0],
-                    Pawn((7,6), "b").dibujar()[1])
-
-
-        self.screen.blit (Rook((0,7), "b").dibujar()[0],
-                    Rook((0,7), "b").dibujar()[1])
-        self.screen.blit (Knight((1,7), "b").dibujar()[0],
-                    Knight((1,7), "b").dibujar()[1])
-        self.screen.blit (Bishop((2,7), "b").dibujar()[0],
-                    Bishop((2,7), "b").dibujar()[1])
-        self.screen.blit (King((3,7), "b").dibujar()[0],
-                    King((3,7), "b").dibujar()[1])
-        self.screen.blit (Queen((4,7), "b").dibujar()[0],
-                    Queen((4,7), "b").dibujar()[1])
-        self.screen.blit (Bishop((5,7), "b").dibujar()[0],
-                    Bishop((5,7), "b").dibujar()[1])
-        self.screen.blit (Knight((6,7), "b").dibujar()[0],
-                    Knight((6,7), "b").dibujar()[1])
-        self.screen.blit (Rook((7,7), "b").dibujar()[0],
-                    Rook((7,7), "b").dibujar()[1])
-
+         #col,fila
+        self.screen.blits(self.seq_surfaces)
         self.actualizartab()
         self.seleccionar()
 
+    def contartiempo(self):
+        """Crea un reloj para controlar el tiempo de cada turno,
+        imprime un contador los últimos 10 segundos"""
+        self.text = 10, '10'.rjust(3)
+        self.font = pygame.font.SysFont("Arial", 60)
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
+        while True:
+            self.counter -= 1
+            self.text = str(self.counter).rjust(3) if self.counter > 0 else 'boom!'
+            self.screen.blit(self.font.render(self.text, True, (0, 0, 0)), (320- 60 // 2, 320 - 60 // 2))
+            pygame.display.flip()
 
-        #self.quitar()
-        #funciona raro, si viene de el menu normal se sale al menú del ajedrez on el x o con n en la pregunta si quiere jugar, si viene de elegir tablero con n marca error, exit regresa a preguntar error: display Surface quit si quiere iniciar un nuevo juego
 
     def seleccionar(self):
+        """Con este método puedes elegir piezas del tablero"""
+        self.counter, text = 10, '10'.rjust(3)
         self.jugador.nombrar()
+
+
         self.orig= 34#580/16
         self.inc = 580/8
         run = True
-        seleccion = False       #indica si han seleccionado una ficha
-        mousex,mousey = 0, 0        #coordenadas rectangulares del mouse
+        seleccion = False     #indica si han seleccionado una ficha
+        mousex,mousey = 0, 0  #coordenadas rectangulares del mouse
         while run:
             mouseclick = False   #indica si se ha hecho click
-            pygame.time.delay(100)#?? things is just dont happen super quick, this is kind of like the clock in the game ??
+            #pygame.time.delay(100)#?? things is just dont happen super quick, this is kind of like the clock in the game ??
             for event in pygame.event.get():
                 if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):## hasta que check mate sea verdadero
                     run = False #sys.exit()
@@ -216,13 +168,26 @@ class Tablero:
                     mousex, mousey = event.pos
                 elif not mouseclick and event.type == MOUSEBUTTONUP:
                     mousex, mousey = event.pos
+                    mousex = math.floor((mousex-self.orig)/self.inc)
+                    mousey = math.floor((mousey-self.orig)/self.inc)
                     mouseclick = True
-                    print('presionaddooo0 en {}'.format(event.pos))
-                    print('presionaddooo0 en {},{}'.format((mousex-self.orig)/self.inc, (mousey-self.orig)/self.inc))
-                    print('presionaddooo0 en {},{}'.format(math.floor((mousex-self.orig)/self.inc), math.floor((mousey-self.orig)/self.inc)))
+                    if mousey >= 0 and mousey < 8:
+                        if mousex >= 0 and mousex < 8:
+                            #print('presionaddooo0 en {}'.format(event.pos))
+                            #print('presionaddooo0 en {},{}'.format((mousex-self.orig)/self.inc, (mousey-self.orig)/self.inc))
+                            click_pos = mousey, mousex
+                            print('presionaddooo0 en {}'.format(click_pos))
+                            #if click_pos ==
 
+                #self.contartiempo()
+
+
+
+                #self.clock.tick(0.3)
                 #pygame.draw.rect(self.screen, (0,0,255), (self.Pieza.seleccionar()), (216, 191, 216))
+                self.clock.tick(5)
                 self.actualizartab()
+
         self.quitar()
 
     def actualizartab(self):

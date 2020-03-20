@@ -63,7 +63,7 @@ class Ajedrez: #Ajedrez
     def iniciarpartida(self):
         """Inicia un nuevo Juego"""
         self.tablero.generartab()
-        self.tablero.inicializartab()
+        self.tablero.dibujarpiezas()
         #self.tablero.seleccionar()
 
 

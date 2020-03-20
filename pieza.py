@@ -12,7 +12,7 @@ import os
 from pygame import image
 from pygame.transform import scale
 from pygame.locals import *
-
+import numpy as np
 
 class Imagen():
     """"Clase que incluye las imgágenes de las piezas que se usarán al programa"""
@@ -40,8 +40,10 @@ class Imagen():
 
         """Se obtiene una lista de las imágenes"""
         #Surface objects
-        b = [b_alfil, b_rey, b_caballo, b_peon, b_reina, b_torre]
-        w = [w_alfil, w_rey, w_caballo, w_peon, w_reina, w_torre]
+        b = [b_torre, b_caballo, b_alfil, b_rey, b_reina, b_alfil, b_caballo, b_torre]+8*[b_peon]
+        w = [w_torre, w_caballo, w_alfil, w_reina, w_rey, w_alfil, w_caballo, w_torre]+8*[w_peon]
+        #b = [b_torre, b_caballo, b_alfil, b_rey, b_reina, b_alfil, b_caballo, b_torre]+8*[b_peon]
+        #w = [w_torre, w_caballo, w_alfil, w_reina, w_rey, w_alfil, w_caballo, w_torre]+8*[w_peon]
 
         """Se hace una comprehensionlist de las imágenes escaladas"""
         self.B = [pygame.transform.scale(img, (self.width, self.height)) for img in b]
@@ -67,21 +69,38 @@ class InvalidMovement(Exception):
 
 class Pieza:
     """Clase piezas"""
-    def __init__(self, pos, color):
-        self.row= pos[1]
-        self.col =pos[0]
-        self.color = color
+    def __init__(self):
+        #self.sqr   = pos
+        #self.row   = pos[1]
+        #self.col   = pos[0]
+        #self.color = color
         #self.img = self.img
-        self.selected = False
+        #self.selected = False
         self.B, self.W = Imagen().importar() #lista de imagenes
-
         self.movelist = []
 
-        self.x = (640-60) / 16
-        self.y = (640-60) / 16
+        self.x = 34#(640-60) / 16
+        self.y = 34#(640-60) / 16
         self.width =65
         self.height=65
         self.increment = (640-60) / 8
+
+    def cuadro_pixel(self,pos): #color w y
+        """Con este método se convierten los cuadros a pixeles en el tablero"""
+        self.row= [x[1] for x in pos]
+        self.col = [x[0] for x in pos]
+        self.row= list( np.array(self.row)*self.increment + self.x)
+        self.col = list(np.array(self.col)*self.increment + self.y)
+        pos_pixel = list (zip(self.col,self.row))
+        return pos_pixel
+
+    def validarmovimientos(self):#lista de movimientos
+        #self.movelist = self.valid_moves(tablero)
+        return self.movelist
+
+
+
+
 
     def dibujar(self,img): #color w y
         """Con este método se dibujan las piezas en el tablero"""
@@ -90,16 +109,10 @@ class Pieza:
             self.forma = self.W[self.img] #self.img atributo por sobreescribir
         else:
             self.forma = self.B[self.img]
+
         self.row= self.row*self.increment + self.x
         self.col = self.col*self.increment + self.y
         return self.forma, (self.col,self.row)
-
-
-
-
-
-
-
 
     def seleccionar1(self):
         return self.selected
@@ -157,8 +170,6 @@ class Pieza:
                 pygame.display.update() # allows to update a portion of the screen, instead of the entire area of the screen. Passing no arguments, updates the entire display
                 #pygame.display.flip() # will update the contents of the entire display
 
-    def validarmovimientos(self, tablero):#lista de movimientos
-        self.movelist = self.valid_moves(tablero)
 
 
     def cambiarpos (self): #actualiza la posición
@@ -166,6 +177,55 @@ class Pieza:
         self.col = posición[1]
 
 
+# Polimorfismo en cada pieza
+
+class Bishop(Pieza):
+    def __init__(self, pos, color):
+        super().__init__(pos, color)
+    def validarmovimientos(self):
+
+        return super().dibujar(self.img)
+class King (Pieza):
+    def __init__(self, pos, color):
+        super().__init__(pos, color)
+    def validarmovimientos(self):
+        return super().dibujar(self.img)
+class Rook (Pieza):
+    def __init__(self, pos, color):
+        super().__init__(pos, color)
+    def validarmovimientos(self):
+        return super().dibujar(self.img)
+class Pawn (Pieza):
+    def __init__(self, pos, color):
+        super().__init__(pos, color)
+    def validar_espacio(self):
+        pass
+    def validarmovimientos(self):
+        if self.color == "w":
+            if self.row == 1: #Permite mover doble cuadro al frente si es el primer movimiento
+                self.movelist.append(self.col, self.row+2)
+                self.movelist.append(self.col, self.row+1)
+            else:
+                if validarespacio():
+                    None
+
+
+        else:
+            if self.row == 6: #Permite mover doble cuadro al frente si es el primer movimiento
+                self.movelist.append(self.col, self.row-1)
+                self.movelist.append(self.col, self.row-2)
+        return super().dibujar(self.img)
+class Queen(Pieza):
+    def __init__(self, pos, color):
+        super().__init__(pos, color)
+    def validarmovimientos(self):
+        return super().dibujar(self.img)
+class Knight(Pieza):
+    def __init__(self, pos, color):
+        super().__init__(pos, color)
+    def validarmovimientosr(self):
+        return super().dibujar(self.img)
+#%%
 
 
 
