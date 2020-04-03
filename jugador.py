@@ -10,7 +10,7 @@ import time
 class Jugador():
     """Constructor de la clase"""
     def __init__(self):
-        self.turno = ''
+        self.turno = 'blanc@'
         self.playerA = ''
         self.playerB = ''
 
@@ -23,7 +23,7 @@ class Jugador():
         self.playerB = input("\nPor favor, \ningresa el nombre del jugador B:")
         print("\n{} tus piezas son las Blancas".format(self.playerA))
         print("\n{} tus piezas son las Negras\n".format(self.playerB))
-        self.turno = self.playerA
+        print("\n{} es tu turno (Blancas)".format(self.playerA))
         #print('\n{} es tu turno'.format(self.turno))
 
 
@@ -32,11 +32,12 @@ class Jugador():
     def cambiar_turno(self):
         """Método para cambiar el turno"""
 
-        if self.turno == self.playerA:
-            print('\n{} es tu turno (Blancas)'.format(self.turno))
-            self.turno = self.playerB
+        if self.turno == 'blanc@':
+            self.turno = 'negr@'
+            print('\n{} es tu turno (Negras)'.format(self.playerB))
+
         else:
-            print('\n{} es tu turno (Negras)'.format(self.turno))
-            self.turno = self.playerA
+            self.turno = 'blanc@'
+            print('\n{} es tu turno (Blancas)'.format(self.playerA))
 
     #def getwinner

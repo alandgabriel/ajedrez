@@ -13,6 +13,8 @@ from pygame import image
 from pygame.transform import scale
 from pygame.locals import *
 import numpy as np
+from jugador import Jugador
+
 
 class Imagen():
     """"Clase que incluye las imgágenes de las piezas que se usarán al programa"""
@@ -21,6 +23,7 @@ class Imagen():
         self.height= 65
         self.B = []
         self.W = []
+
 
     def importar(self):
         """Aquí se cargan las imágenes que representarán las piezas utilizando pygame"""
@@ -40,7 +43,7 @@ class Imagen():
 
         """Se obtiene una lista de las imágenes"""
         #Surface objects
-        b = [b_torre, b_caballo, b_alfil, b_rey, b_reina, b_alfil, b_caballo, b_torre]+8*[b_peon]
+        b = 8* [b_peon]+[b_torre, b_caballo, b_alfil, b_rey, b_reina, b_alfil, b_caballo, b_torre]
         w = [w_torre, w_caballo, w_alfil, w_reina, w_rey, w_alfil, w_caballo, w_torre]+8*[w_peon]
         #b = [b_torre, b_caballo, b_alfil, b_rey, b_reina, b_alfil, b_caballo, b_torre]+8*[b_peon]
         #w = [w_torre, w_caballo, w_alfil, w_reina, w_rey, w_alfil, w_caballo, w_torre]+8*[w_peon]
@@ -78,7 +81,7 @@ class Pieza:
         #self.selected = False
         self.B, self.W = Imagen().importar() #lista de imagenes
         self.movelist = []
-
+        self.jugador  = Jugador()
         self.x = 34#(640-60) / 16
         self.y = 34#(640-60) / 16
         self.width =65
@@ -180,26 +183,39 @@ class Pieza:
 # Polimorfismo en cada pieza
 
 class Bishop(Pieza):
-    def __init__(self, pos, color):
-        super().__init__(pos, color)
-    def validarmovimientos(self):
+    def __init__(self):
+        super().__init__()
 
+    def validarmovimientos(self):
         return super().dibujar(self.img)
+
+    def seleccionada(self):
+        print('seleccionaste un alfil {}'.format(self.jugador.turno))
+
 class King (Pieza):
-    def __init__(self, pos, color):
-        super().__init__(pos, color)
+    def __init__(self):
+        super().__init__()
     def validarmovimientos(self):
         return super().dibujar(self.img)
+    def seleccionada(self):
+        print('seleccionaste una rey {}'.format(self.jugador.turno))
+
 class Rook (Pieza):
-    def __init__(self, pos, color):
-        super().__init__(pos, color)
+    def __init__(self):
+        super().__init__()
     def validarmovimientos(self):
         return super().dibujar(self.img)
+    def seleccionada(self):
+        print('seleccionaste una torre {}'.format(self.jugador.turno))
+        return self.jugador.turno
+
 class Pawn (Pieza):
-    def __init__(self, pos, color):
-        super().__init__(pos, color)
+    def __init__(self):
+        super().__init__()
     def validar_espacio(self):
         pass
+    def seleccionada(self):
+        print('seleccionaste un peón {}'.format(self.jugador.turno))
     def validarmovimientos(self):
         if self.color == "w":
             if self.row == 1: #Permite mover doble cuadro al frente si es el primer movimiento
@@ -216,59 +232,18 @@ class Pawn (Pieza):
                 self.movelist.append(self.col, self.row-2)
         return super().dibujar(self.img)
 class Queen(Pieza):
-    def __init__(self, pos, color):
-        super().__init__(pos, color)
+    def __init__(self):
+        super().__init__()
     def validarmovimientos(self):
         return super().dibujar(self.img)
+    def seleccionada(self):
+        print('seleccionaste una reina {}'.format(self.jugador.turno))
+
 class Knight(Pieza):
-    def __init__(self, pos, color):
-        super().__init__(pos, color)
+    def __init__(self):
+        super().__init__()
     def validarmovimientosr(self):
         return super().dibujar(self.img)
-#%%
-
-
-
-
-
-
-
-# Polimorfismo en cada pieza
-
-class Bishop(Pieza):
-    def __init__(self, pos, color):
-        self.img = 0
-        super().__init__(pos, color)
-    def dibujar(self):
-        return super().dibujar(self.img)
-class King (Pieza):
-    def __init__(self, pos, color):
-        self.img = 1
-        super().__init__(pos, color)
-    def dibujar(self):
-        return super().dibujar(self.img)
-class Rook (Pieza):
-    def __init__(self, pos, color):
-        self.img = 5
-        super().__init__(pos, color)
-    def dibujar(self):
-        return super().dibujar(self.img)
-class Pawn (Pieza):
-    def __init__(self, pos, color):
-        self.img = 3
-        super().__init__(pos, color)
-    def dibujar(self):
-        return super().dibujar(self.img)
-class Queen(Pieza):
-    def __init__(self, pos, color):
-        self.img = 4
-        super().__init__(pos, color)
-    def dibujar(self):
-        return super().dibujar(self.img)
-class Knight(Pieza):
-    def __init__(self, pos, color):
-        self.img = 2
-        super().__init__(pos, color)
-    def dibujar(self):
-        return super().dibujar(self.img)
+    def seleccionada(self):
+        print('seleccionaste un caballo {}'.format(self.jugador.turno))
 #%%

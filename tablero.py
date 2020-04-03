@@ -59,12 +59,13 @@ class Tablero:
             "7" : 6,#self.tableros[6],
             "8" : 7#self.tableros[7]
         }
-        self.mascara_piezas = ['torre', 'caballo', 'alfil', 'rey', 'reina', 'alfil', 'caballo', 'torre']+8*['peon']
+        self.mascara_piezas = [Rook, Knight, Bishop, King, Queen, Bishop, Knight, Rook]+8*[Pawn]
         self.pos_blancas = list(zip(list(range(8))+list(range(8)),[0]*8+[1]*8))
         self.pos_negras = list(zip(list(range(8))+list(range(8)),[6]*8+[7]*8))
         self.pixel_blancas = self.pieza.cuadro_pixel(self.pos_blancas)
         self.pixel_negras = self.pieza.cuadro_pixel (self.pos_negras)
         self.seq_surfaces = list (zip (self.pieza.W + self.pieza.B, self.pixel_blancas + self.pixel_negras))
+        self.click_pos = ()
 
     def desplegar(self):
         """Despliega el menú de opciones para los colores del tablero"""
@@ -146,18 +147,33 @@ class Tablero:
             self.screen.blit(self.font.render(self.text, True, (0, 0, 0)), (320- 60 // 2, 320 - 60 // 2))
             pygame.display.flip()
 
+    def ValidSeleccion (self):
+        if self.jugador.turno == 'blanc@':   # Blancas
+            self.ix_seleccion = [ix for ix,val in enumerate(self.pos_blancas) if val==self.click_pos]
+            if self.ix_seleccion != []:
+                self.ix_seleccion = self.ix_seleccion[0]
+                self.mascara_piezas[self.ix_seleccion]().seleccionada()
+            else:
+                print ('Selecciona una ficha valida')
+        else:       #Negras
+            self.ix_seleccion = [ix for ix,val in enumerate(self.pos_negras) if val==self.click_pos]
+            if self.ix_seleccion != []:
+                self.ix_seleccion = self.ix_seleccion[0]
+                self.mascara_piezas[self.ix_seleccion]().seleccionada()
+            else:
+                print ('Selecciona una ficha valida')
+
+
 
     def seleccionar(self):
         """Con este método puedes elegir piezas del tablero"""
         self.counter, text = 10, '10'.rjust(3)
         self.jugador.nombrar()
-
-
         self.orig= 34#580/16
         self.inc = 580/8
         run = True
         seleccion = False     #indica si han seleccionado una ficha
-        mousex,mousey = 0, 0  #coordenadas rectangulares del mouse
+        mousey,mousex = 0, 0  #coordenadas rectangulares del mouse
         while run:
             mouseclick = False   #indica si se ha hecho click
             #pygame.time.delay(100)#?? things is just dont happen super quick, this is kind of like the clock in the game ??
@@ -165,9 +181,9 @@ class Tablero:
                 if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):## hasta que check mate sea verdadero
                     run = False #sys.exit()
                 elif not mouseclick and event.type == MOUSEMOTION:
-                    mousex, mousey = event.pos
+                    mousey, mousex = event.pos
                 elif not mouseclick and event.type == MOUSEBUTTONUP:
-                    mousex, mousey = event.pos
+                    mousey, mousex = event.pos
                     mousex = math.floor((mousex-self.orig)/self.inc)
                     mousey = math.floor((mousey-self.orig)/self.inc)
                     mouseclick = True
@@ -175,18 +191,19 @@ class Tablero:
                         if mousex >= 0 and mousex < 8:
                             #print('presionaddooo0 en {}'.format(event.pos))
                             #print('presionaddooo0 en {},{}'.format((mousex-self.orig)/self.inc, (mousey-self.orig)/self.inc))
-                            click_pos = mousey, mousex
-                            print('presionaddooo0 en {}'.format(click_pos))
+                            self.click_pos = mousey, mousex
+                            self.ValidSeleccion()
                             #if click_pos ==
 
-                #self.contartiempo()
+            #self.contartiempo()
 
 
 
-                #self.clock.tick(0.3)
-                #pygame.draw.rect(self.screen, (0,0,255), (self.Pieza.seleccionar()), (216, 191, 216))
-                self.clock.tick(5)
-                self.actualizartab()
+            #self.clock.tick(0.3)
+            #pygame.draw.rect(self.screen, (0,0,255), (self.Pieza.seleccionar()), (216, 191, 216))
+            #self.clock.tick(5)
+
+            self.actualizartab()
 
         self.quitar()
 
